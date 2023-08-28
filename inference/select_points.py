@@ -13,9 +13,15 @@ if not os.path.exists(dirs):
 sav_pth = 'vis_video'
 if not os.path.exists(sav_pth):
     os.mkdir(sav_pth)
+
 img = imread(dirs)
-fig, ax = plt.subplots()
+
+fig = plt.figure()
+fig.set_size_inches(1,1,forward=False)
+ax = plt.Axes(fig, [0., 0., 1., 1.])
+ax.set_axis_off()
 ax.imshow(img)
+
 coords = []
 
 def ondrag(event):
@@ -25,7 +31,7 @@ def ondrag(event):
     coords.append((x, y))
     ax.plot([x], [y], 'o', color='red')
     fig.canvas.draw_idle()
-
+fig.add_axes(ax)
 cursor = Cursor(ax, useblit=True, color='red', linewidth=1)
 fig.canvas.mpl_connect('motion_notify_event', ondrag)
 plt.show()
@@ -61,20 +67,20 @@ fig, ax = plt.subplots()
 
 pixels  = [tuple(sublist[:2]) for sublist in zip(x_new,y_new)]
 ###########################################
-img = imread(dir)
+img = imread(dirs)
 fig, ax = plt.subplots()
 ax.set_xticks([])
 ax.set_yticks([])
 ax.imshow(img)
 plt.plot(x_new, y_new, 'r-', label='Smooth curve')
 fig.subplots_adjust(left=0, right=1, top=1, bottom=0)
-plt.savefig(os.path.join(sav_pth,os.path.basename(dir)).replace('.png','_sat_track.png'),bbox_inches='tight', pad_inches=0)
+plt.savefig(os.path.join(sav_pth,os.path.basename(dirs)).replace('.png','_sat_track.png'),bbox_inches='tight', pad_inches=0)
 plt.close()
 
 ###########################################
 angle_list = []
 for i,pixel in enumerate(pixels[:-1]):
-    img = imread(dir)
+    img = imread(dirs)
 
     x1, y1 = pixel
     x2, y2 = pixels[i+1]
@@ -92,7 +98,7 @@ for i,pixel in enumerate(pixels[:-1]):
     ax.arrow(x1, y1, dx*10, dy*10, color='red', width=length, head_width=4*length, head_length=5*length)
     
     name = '_sat'+'%05d' % int(i) + ".png"
-    plt.savefig(os.path.join(sav_pth,os.path.basename(dir)).replace('.png',name),bbox_inches='tight')
+    plt.savefig(os.path.join(sav_pth,os.path.basename(dirs)).replace('.png',name),bbox_inches='tight')
     plt.close()
 
 

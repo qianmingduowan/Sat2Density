@@ -11,7 +11,7 @@ tensorboard
 lpips
 easydict
 termcolor
-wadb==0.13.3
+wandb==0.13.3
 pytorch_msssim
 opencv-contrib-python==4.6.0.66
 albumentations
