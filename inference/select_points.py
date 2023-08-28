@@ -9,7 +9,7 @@ data = sys.argv[1]
 assert data.endswith('satView_polish.png')
 dir = os.path.join('dataset/CVACT/satview_correct',data)
 if not os.path.exists(dir):
-    dir.replace('dataset/CVACT/satview_correct',demo_img)
+    dir.replace('dataset/CVACT',demo_img)
 sav_pth = 'vis_video'
 if not os.path.exists(sav_pth):
     os.mkdir(sav_pth)
