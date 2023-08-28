@@ -21,5 +21,6 @@ CUDA_VISIBLE_DEVICES=0 python offline_train_test.py --yaml=sat2density_cvact \
 # make video
 python inference/img2vid.py
 
+#  visualize  vis_video/volume_data.vtk with ParaView
 
 
