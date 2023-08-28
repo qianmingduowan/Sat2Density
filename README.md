@@ -22,13 +22,13 @@ Then pre-trained model for CVACT & CVUSA could be download from [CVACT](https://
 Please unzip and then put in in in `wandb` folder.
 
 ## Quick Start demo
-synthesis video
+Synthesis video
 
 `
 bash inference/quick_demo_video.sh
 `
 
-style interpolation
+Illumination interpolation
 
 `
 bash inference/quick_demo_interpolation.sh
@@ -63,7 +63,7 @@ To test synthesis ground videos
 bash inference/synthesis_video.sh
 ```
 
-To test style interpolation
+To test illumination interpolation
 ```bash 
 #demo
 python offline_train_test.py --task=test_interpolation --yaml=sat2density_cvact --test_ckpt_path=2u87bj8w 
