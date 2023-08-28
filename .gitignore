@@ -1,4 +1,5 @@
-dataset/*
+dataset/CVACT
+dataset/CVUSA
 test*
 *.pyc
 output*
