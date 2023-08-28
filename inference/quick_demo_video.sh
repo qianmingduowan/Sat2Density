@@ -1,4 +1,5 @@
 sat_name=__-DFIFxvZBCn1873qkqXA_satView_polish.png
+
 sty_name=VAMM6sIEbYAY5E6ZD_RMKg_grdView.png
 
 # select point
@@ -12,8 +13,7 @@ python inference/select_points.py ${sat_name}
 # if you want use illumination from another image , you could add --sty_img=WsKPDHEgLwrhrJXcUU34xA_grdView.png
 CUDA_VISIBLE_DEVICES=0 python offline_train_test.py --yaml=sat2density_cvact \
 --test_ckpt_path=2u87bj8w \
---demo_img=${sat_name} \
---sty_img=$(sty_name) \
+--demo_img=${sat_name} --sty_img=$(sty_name) \
 --data.root=demo_img
 
 
