@@ -1,7 +1,5 @@
 # Sat2Density: Faithful Density Learning from Satellite-Ground Image Pairs
 
-> Sat2Density: Faithful Density Learning from Satellite-Ground Image Pairs
-
 > [Ming Qian](https://qianmingduowan.github.io/), Jincheng Xiong, [Gui-Song Xia](http://www.captain-whu.com/xia_En.html), [Nan Xue](https://xuenan.net)
 >
 > IEEE/CVF International Conference on Computer Vision (ICCV), 2023
