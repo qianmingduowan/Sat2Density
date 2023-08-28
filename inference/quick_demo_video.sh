@@ -18,7 +18,7 @@ CUDA_VISIBLE_DEVICES=0 python offline_train_test.py --yaml=sat2density_cvact \
 
 
 # make video
-python img2vid.py
+python inference/img2vid.py
 
 
 
