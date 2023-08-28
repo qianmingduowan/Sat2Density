@@ -1,2 +1,0 @@
-upfirdn2d
-upfirdn2d_cuda
