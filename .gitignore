@@ -24,4 +24,9 @@ pixels.csv
 demo_img/add_img.py
 .vscode
 vis**
+<<<<<<< HEAD
+
+**/*.egg-info
+=======
 **INFO**
+>>>>>>> a8dfa1ba2348a1e1af8c1c48a57b003fd7385a50

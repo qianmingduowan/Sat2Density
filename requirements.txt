@@ -1,4 +1,5 @@
 cmake
+numpy==1.22.1
 Pillow>=8.3.2
 scipy
 scikit-image
@@ -10,7 +11,7 @@ tensorboard
 lpips
 easydict
 termcolor
-wandb==0.13.3
+wadb==0.13.3
 pytorch_msssim
 opencv-contrib-python==4.6.0.66
 albumentations
