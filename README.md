@@ -28,7 +28,6 @@ Synthesis video
 `
 bash inference/quick_demo_video.sh
 `
-[Simple Guide Video](docs/how_to_work.mp4)
 
 Illumination interpolation
 
