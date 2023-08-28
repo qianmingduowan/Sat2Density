@@ -1,5 +1,5 @@
-sat_name = __-DFIFxvZBCn1873qkqXA_satView_polish.png
-sty_name = VAMM6sIEbYAY5E6ZD_RMKg_grdView.png
+sat_name=__-DFIFxvZBCn1873qkqXA_satView_polish.png
+sty_name=VAMM6sIEbYAY5E6ZD_RMKg_grdView.png
 
 # select point
 # First find a starting point, then press and hold the left mouse button, draw any shape, 
