@@ -8,7 +8,7 @@ train_*
 __pycache__
 pretrained_models
 command
-*.png
+# *.png
 *.jpg
 *.pth
 vis/
@@ -17,9 +17,9 @@ result
 pixels.csv
 *.mp4
 *.vtk
-demo
 **/build/
 **.egg
 **.zip
 demo_img/add_img.py
 .vscode
+vis**
