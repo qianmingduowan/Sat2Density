@@ -16,7 +16,6 @@ vis/
 compute_D*
 result
 pixels.csv
-*.mp4
 *.vtk
 **/build/
 **.egg
