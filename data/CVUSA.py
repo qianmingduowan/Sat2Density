@@ -24,9 +24,7 @@ def data_list(img_root,mode):
                 panorama_name = re.split(r',', re.split('\n', i)[0])[1]
                 data_list.append([aerial_name, panorama_name])
     print('length of dataset is: ', len(data_list))
-    return [os.path.join(img_root, i[1]) for i in data_list\
-        if os.path.exists(os.path.join(img_root, i[0]))\
-              and os.path.exists(os.path.join(img_root, i[1]))]
+    return [os.path.join(img_root, i[1]) for i in data_list]
     
 def img_read(img,size=None,datatype='RGB'):
     img = Image.open(img).convert('RGB' if datatype=='RGB' else "L")

@@ -28,7 +28,7 @@ class BaseModel(ABC):
         -- <modify_commandline_options>:    (optionally) add model-specific options and set default options.
     """
 
-    def __init__(self, opt):
+    def __init__(self, opt,wandb=None):
         """Initialize the BaseModel class.
         Parameters:
             opt (Option class)-- stores all the experiment flags; needs to be a subclass of BaseOptions
@@ -38,14 +38,10 @@ class BaseModel(ABC):
             -- self.loss_names (str list):          specify the training losses that you want to plot and save.
             -- self.model_names (str list):         define networks used in our training.
         """
-        self.wandb = wandb.init(
-            project=opt.project,
-            name=opt.name,
-            group=opt.Group,
-            config=opt,
-            )
-        opt.save_dir =self.wandb.dir
-        options.save_options_file(opt,self.wandb.dir)
+        self.wandb = wandb
+        if opt.isTrain:
+            opt.save_dir =wandb.dir
+            options.save_options_file(opt,opt.save_dir)
         self.opt = opt
         self.device = "cpu" if opt.cpu or not torch.cuda.is_available() else "cuda:{}".format(opt.gpu)
         # torch.backends.cudnn.benchmark = True

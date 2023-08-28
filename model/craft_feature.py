@@ -109,8 +109,8 @@ class Model(BaseModel):
         data = importlib.import_module("data.{}".format(opt.data.dataset))
         if opt.task in ["train", "Train"]:
             train_data = data.Dataset(opt,"train",opt.data.train_sub)
+            
             self.train_loader = DataLoader(train_data,batch_size=opt.batch_size,shuffle=True,num_workers=opt.data.num_workers,drop_last=True)
-            self.len_train_loader = len(self.train_loader)
             self.len_train_loader = len(self.train_loader)
 
         val_data   = data.Dataset(opt,"val")
