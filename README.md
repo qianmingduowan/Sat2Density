@@ -4,7 +4,7 @@
 >
 > IEEE/CVF International Conference on Computer Vision (ICCV), 2023
 >
-> [Project](https://sat2density.github.io/) | [Paper](https://arxiv.org/abs/2303.14672) | [Data]() | [Install.md]()
+> [Project](https://sat2density.github.io/) | [Paper](https://arxiv.org/abs/2303.14672) | [Data]() | [Install.md](docs/INSTALL.md)
 
 
 ## Software Installation 
