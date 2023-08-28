@@ -182,13 +182,13 @@ def render_sat(opt,voxel):
         assert Exception('Not implement yet')
 
     pixel_resolution = realworld_scale/sat_W #### pixel resolution of satellite image in realworld
-    if opt.data.sample_total_length:
-        sample_total_length = opt.data.sample_total_length
-    else: sample_total_length = (int(max(np.sqrt((realworld_scale/2)**2+(realworld_scale/2)**2+(2)**2), \
-        np.sqrt((realworld_scale/2)**2+(realworld_scale/2)**2+(opt.data.max_height-origin_height)**2))/pixel_resolution))/(sat_W/2)
-    # sample_total_length = 2
-    #### sample_total_length: it can be definition in future, which is the farest length between sample point and original ponit 
-    assert sat_W==sat_H
+    # if opt.data.sample_total_length:
+    #     sample_total_length = opt.data.sample_total_length
+    # else: sample_total_length = (int(max(np.sqrt((realworld_scale/2)**2+(realworld_scale/2)**2+(2)**2), \
+    #     np.sqrt((realworld_scale/2)**2+(realworld_scale/2)**2+(opt.data.max_height-origin_height)**2))/pixel_resolution))/(sat_W/2)
+    sample_total_length = 2
+    # #### sample_total_length: it can be definition in future, which is the farest length between sample point and original ponit 
+    # assert sat_W==sat_H
 
     origin = sat_ori.to(opt.device)  ## w,z,h, samiliar to NERF coordinate definition
     sample_len = ((torch.arange(opt.data.sample_number)+1)*(sample_total_length/opt.data.sample_number)).to(opt.device)
