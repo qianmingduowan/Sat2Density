@@ -25,6 +25,8 @@ bash scripts/download_weights.sh
 ## Quick Start demo
 Synthesis video
 
+need GUI for visualization and interactive drawing tracks, details can be seen in 'inference/select_points.py'.
+
 `
 bash inference/quick_demo_video.sh
 `
