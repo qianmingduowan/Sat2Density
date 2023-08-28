@@ -9,11 +9,11 @@ data = sys.argv[1]
 assert data.endswith('satView_polish.png')
 dirs = os.path.join('dataset/CVACT/satview_correct',data)
 if not os.path.exists(dirs):
-    dirs.replace('dataset/CVACT','demo_img')
+    dirs = dirs.replace('dataset/CVACT','demo_img')
 sav_pth = 'vis_video'
 if not os.path.exists(sav_pth):
     os.mkdir(sav_pth)
-img = imread(dir)
+img = imread(dirs)
 fig, ax = plt.subplots()
 ax.imshow(img)
 coords = []
