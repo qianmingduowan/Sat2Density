@@ -338,14 +338,14 @@ class BaseModel(ABC):
                         volume_data = self.out_put.voxel.squeeze().cpu().numpy().transpose((1,2,0))
                         volume_data = np.clip(volume_data, None, 10)
 
-                        # import pyvista as pv
+                        import pyvista as pv
 
-                        # grid = pv.UniformGrid()
-                        # grid.dimensions = volume_data.shape
-                        # grid.spacing = (1, 1, 1)
-                        # grid.origin = (0, 0, 0)
-                        # grid.point_data['values'] = volume_data.flatten(order='F')
-                        # grid.save(os.path.join('vis_video',"volume_data.vtk") ) # vtk file could be visualized by ParaView app
+                        grid = pv.UniformGrid()
+                        grid.dimensions = volume_data.shape
+                        grid.spacing = (1, 1, 1)
+                        grid.origin = (0, 0, 0)
+                        grid.point_data['values'] = volume_data.flatten(order='F')
+                        grid.save(os.path.join('vis_video',"volume_data.vtk") ) # vtk file could be visualized by ParaView app
 
                         sat_opacity,sat_depth = render_sat(opt,self.out_put['voxel'])
                         sat_depth = (2 - sat_depth)/(opt.data.max_height/15)*255.

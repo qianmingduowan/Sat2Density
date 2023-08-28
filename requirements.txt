@@ -1,7 +1,7 @@
 cmake
 numpy==1.22.1
 Pillow>=8.3.2
-scipy==1.3.3
+scipy
 scikit-image
 tqdm==4.35.0
 cython
@@ -13,4 +13,6 @@ easydict
 termcolor
 wadb==0.13.3
 pytorch_msssim
-opencv-python 
+opencv-contrib-python==4.6.0.66
+albumentations
+pyvista

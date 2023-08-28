@@ -17,7 +17,7 @@ def image_to_video(img_dir,image_names, media_path):
 def img_pair2vid(sat_list,grd_list,angle_list=None,media_path= 'output.mp4'):
     fourcc = cv2.VideoWriter_fourcc('M', 'P', '4', 'V')
     out = cv2.VideoWriter(media_path, fourcc, 12.0, (512, 256))
-    out_sat = cv2.VideoWriter(media_path.replace('.mp4','_sat.mp4'), fourcc, 12.0, (394, 394))
+    out_sat = cv2.VideoWriter(media_path.replace('.mp4','_sat.mp4'), fourcc, 12.0, (389, 389))
     assert len(sat_list) == len(grd_list)
     for i  in range(len(sat_list)):
 
