@@ -14,7 +14,7 @@ For installation, please check out [install.md](scripts/INSTALL.md).
 
 
 ## Hardware Requirement
-We trained our model using an 1 V100 32GB GPU. Training took about 20 hours.
+We trained our model using 1 V100 32GB GPU. Training took about 20 hours.
 
 
 
