@@ -20,7 +20,7 @@ We trained our model using 1 V100 32GB GPU. Training took about 20 hours.
 
 
 ## Pre-trained model
-Then pre-trained model for CVUSA & CVACT could be download from [Google Drive](https://drive.google.com/drive/folders/183sWTSYm7Rsi20pbyRsalbGGJi5JOcr1?usp=drive_link),
+Then pre-trained model for CVACT & CVUSA   could be download from [CVACT](https://github.com/sat2density/checkpoints/releases/download/cvact/run-20230219_141512-2u87bj8w.zip) and [CVUSA](https://github.com/sat2density/checkpoints/releases/download/cvusa/run-20230303_142752-2cqv8uh4.zip) seperately.
 Please unzip and then put in in in `wandb` folder.
 
 ## Quick Start demo
