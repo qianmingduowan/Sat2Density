@@ -20,6 +20,8 @@ apt-get update && apt-get install -y --allow-downgrades --allow-change-held-pack
         imagemagick
 
 pip install --upgrade -r scripts/requirements.txt
+pip install -U git+https://github.com/pyvista/pyvista.git@main
+
 
 for p in correlation channelnorm resample2d bias_act upfirdn2d; do
   cd imaginaire/third_party/${p};
