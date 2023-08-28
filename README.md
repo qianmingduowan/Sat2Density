@@ -89,7 +89,7 @@ CUDA_VISIBLE_DEVICES=X python train.py --yaml=sat2density_cvusa
 If you use this code for your research, please cite
 
 ```
-@inproceedings{hao2021GANcraft,
+@inproceedings{qian2021sat2density,
   title={Sat2Density: Faithful Density Learning from Satellite-Ground Image Pairs},
   author={Qian, Ming and Xiong, Jincheng and Xia, Gui-Song and Xue, Nan},
   booktitle={ICCV},
