@@ -64,15 +64,6 @@ To test synthesis ground videos
 bash inference/synthesis_video.sh
 ```
 
-To test illumination interpolation
-```bash 
-#demo
-python offline_train_test.py --task=test_interpolation --yaml=sat2density_cvact --test_ckpt_path=2u87bj8w 
---sty_img1=_jaGbjgbHAe78_VhcPtmZQ_grdView.png --sty_img2=pdZmLHYEhe2PHj_8-WHMhw_grdView.png --demo_img=VAMM6sIEbYAY5E6ZD_RMKg_satView_polish.png
-```
-
-
-
 ## Training
 
 ### Training command
