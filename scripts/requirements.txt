@@ -12,3 +12,4 @@ easydict
 termcolor
 wandb==0.13.3
 pytorch_msssim
+pyvista
