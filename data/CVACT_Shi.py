@@ -5,8 +5,8 @@ import scipy.io as sio
 import torchvision.transforms as transforms
 
 def data_list(img_root,mode):
-    exist_aer_list = os.listdir(img_root + 'satview_correct')
-    exist_grd_list = os.listdir(img_root + 'streetview')
+    exist_aer_list = os.listdir(os.path.join(img_root , 'satview_correct'))
+    exist_grd_list = os.listdir(os.path.join(img_root , 'streetview'))
     allDataList = os.path.join(img_root, 'ACT_data.mat')
     anuData = sio.loadmat(allDataList)
 
