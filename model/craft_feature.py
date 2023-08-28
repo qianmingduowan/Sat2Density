@@ -6,7 +6,7 @@ from  torch.utils.data import DataLoader
 from easydict import EasyDict as edict
 
 class Model(BaseModel):
-    def __init__(self, opt):
+    def __init__(self, opt, wandb=None):
 
         """Initialize the Generator.
         Parameters:
