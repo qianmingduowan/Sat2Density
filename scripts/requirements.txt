@@ -1,0 +1,14 @@
+cmake
+Pillow>=8.3.2
+scipy==1.3.3
+scikit-image
+tqdm==4.35.0
+cython
+qimage2ndarray
+requests==2.25.1
+tensorboard
+lpips
+easydict
+termcolor
+wandb==0.13.3
+pytorch_msssim

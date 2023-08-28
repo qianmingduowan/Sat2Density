@@ -1,0 +1,9 @@
+python offline_train_test.py  --yaml=sat2density_cvact --test_ckpt_path=2u87bj8w --sty_img=t1DOCdyniuWDC5JPqm4MWA_grdView.png
+python offline_train_test.py  --yaml=sat2density_cvact --test_ckpt_path=2u87bj8w --sty_img=XefdeYLN_XZEaG2VLPFVtA_grdView.png
+python offline_train_test.py  --yaml=sat2density_cvact --test_ckpt_path=2u87bj8w --sty_img=H2y6n9mCg53Ip1-0_UigRQ_grdView.png
+python offline_train_test.py  --yaml=sat2density_cvact --test_ckpt_path=2u87bj8w --sty_img=YOBJgPIILw9PbSFvnYZFZg_grdView.png
+python offline_train_test.py  --yaml=sat2density_cvact --test_ckpt_path=2u87bj8w --sty_img=lqgXjFM3zR8EWbiWWfgjNA_grdView.png
+python offline_train_test.py  --yaml=sat2density_cvact --test_ckpt_path=2u87bj8w --sty_img=fOX6greOFJMH8IlA8Gm5hg_grdView.png
+python offline_train_test.py  --yaml=sat2density_cvact --test_ckpt_path=2u87bj8w --sty_img=uZoS7QAxnEGlw22PtslB_Q_grdView.png
+python offline_train_test.py  --yaml=sat2density_cvact --test_ckpt_path=2u87bj8w --sty_img=FVJZ86vbU43hYf4-uM4lFg_grdView.png
+python offline_train_test.py  --yaml=sat2density_cvact --test_ckpt_path=2u87bj8w --sty_img=uHD7qJude23nqRPLVrdKIA_grdView.png

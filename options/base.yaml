@@ -1,0 +1,53 @@
+project: 0_test                                               
+name:                                                      
+model: shi                                                     
+yaml:                                                       
+seed: 6004                                                  
+task: Train 
+Group: DEBUG                                                
+gpu: 0                                                      
+cpu: false                                                  
+load:                                                       
+arch: {}                                                    
+test_ckpt_path:
+demo_img: __-DFIFxvZBCn1873qkqXA_grdView.png
+
+# for testing
+sty_img:
+
+# only for illumination interpolation visualization
+sty_img1:
+sty_img2:
+
+data:                                                       
+    sky_mask:                                               
+    root:                                                   
+    dataset:                                                
+    num_workers: 24                                         
+    histo_mode:
+    sample_total_length:
+    train_sub:
+
+optim:
+    lr_gen: 0.0001                                   # learning rate (main)
+    lr_dis: 0.0004
+    gan_mode: hinge
+    beta1: 0    
+    ground_prior:
+    loss_weight:
+        GAN: 1
+        L1: 1
+    perceptual_loss:
+        mode: 'vgg19'
+        layers: ['relu_3_1', 'relu_4_1', 'relu_5_1']
+        weights: [0.125, 0.25, 1.0]
+    lr_policy:
+        iteration_mode: False
+        type: step
+        step_size: 13
+        gamma: 0.1
+batch_size: 16                                              # batch size
+resume: false                                               # not test
+fp16:                                                       # not test
+vis_dir: 'vis'
+max_epochs: 30

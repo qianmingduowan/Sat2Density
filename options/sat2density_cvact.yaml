@@ -1,0 +1,90 @@
+_parent_: options/base.yaml
+
+gpu_ids: '0'
+
+## config for wandb
+project: 'sat2pano'
+Group: 'craft_feature'
+
+
+model: craft_feature                           # model/craft_feature
+arch:   
+  gen:                                         ## config for generator
+    netG: imaginaire.generators.craft_2stage_add_style  
+    weight_norm_type: spectral
+    activation_norm_type: instance
+    padding_mode: reflect
+    transform_mode: volum_rendering
+    feature_model:
+    style_inject: histo                        # use histogram to inject illumination, chose list [histo, perspective]
+    cat_PE: 
+    cat_opa: true
+    cat_depth: true
+    depth_arch:                                # Density Net
+      name: depth
+      num_filters: 32                          
+      num_downsamples: 4                       
+      num_res_blocks: 6                        
+      output_nc: 64
+    render_arch:                               # Render Net
+      name: render
+      num_filters: 64                          
+      num_downsamples: 4                       
+      num_res_blocks: 9                        
+      output_nc: 3
+    style_enc_cfg:                              # style injection
+      input_image_channels: 3
+      num_filters: 256
+      kernel_size: 3
+      style_dims: 128
+      interm_style_dims: 256
+      hidden_channel: 256
+      weight_norm_type: spectral
+  dis:                                          # discriminator
+    netD: imaginaire.discriminators.multires_patch_pano
+    num_filters: 64
+    max_num_filters: 512
+    num_discriminators: 3
+    num_layers: 3
+    weight_norm_type: spectral
+    activation_norm_type: instance
+
+
+
+data:                                            # data options
+  dataset: CVACT_Shi                           # dataset name
+  root: ./dataset/CVACT/ 
+  sat_size: [256,256]              
+  pano_size: [512, 128]
+  sample_number: 100                           # points per ray
+  max_height: 8                                # pre-defined density space in height axis
+  sky_mask: true                               
+  histo_mode: rgb
+  # val: 
+  #   sub: 500        
+
+
+optim:   
+  lr_gen: 0.00005                                
+  lr_dis: 0.00005
+  gan_mode: non_saturated                         #'hinge', 'least_square',  'non_saturated', 'wasserstein'
+  loss_weight:
+    L1: 1   
+    L2: 10
+    GaussianKL: 0.1
+    feature_matching: 10.0
+    Perceptual: 10
+    sky_inner: 1 
+    GAN: 1                                              
+
+  lr_policy:
+    iteration_mode: False                         # iteration or epoch
+    type: step
+    step_size: 45                         
+    gamma: 0.1
+
+  ground_prior: true 
+
+######## for test, if only style, will random choice one style for save dir
+only_style: 
+only_img:

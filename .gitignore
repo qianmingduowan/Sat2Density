@@ -1,0 +1,24 @@
+dataset/*
+test*
+*.pyc
+output*
+wandb/*
+train_*
+# dataset
+__pycache__
+pretrained_models
+command
+*.png
+*.jpg
+*.pth
+vis/
+compute_D*
+result
+pixels.csv
+*.mp4
+*.vtk
+demo
+**/build/
+**.egg
+**.zip
+demo_img/add_img.py

@@ -1,0 +1,2 @@
+resample2d
+resample2d_cuda

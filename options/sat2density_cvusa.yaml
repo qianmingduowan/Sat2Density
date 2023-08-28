@@ -1,0 +1,10 @@
+_parent_: options/sat2density_cvact.yaml
+
+
+arch:
+  dis:
+    num_discriminators: 2
+
+data:
+    dataset: CVUSA                                       
+    root: ./dataset/CVUSA/ 

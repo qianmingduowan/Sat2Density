@@ -1,0 +1,9 @@
+CUDA_VISIBLE_DEVICES=1 python offline_train_test.py --yaml=sat2density_cvusa --test_ckpt_path=2cqv8uh4  --sty_img=0001227.jpg
+CUDA_VISIBLE_DEVICES=1 python offline_train_test.py --yaml=sat2density_cvusa --test_ckpt_path=2cqv8uh4  --sty_img=0044093.jpg
+CUDA_VISIBLE_DEVICES=1 python offline_train_test.py --yaml=sat2density_cvusa --test_ckpt_path=2cqv8uh4  --sty_img=0015421.jpg
+CUDA_VISIBLE_DEVICES=1 python offline_train_test.py --yaml=sat2density_cvusa --test_ckpt_path=2cqv8uh4  --sty_img=0040767.jpg
+CUDA_VISIBLE_DEVICES=1 python offline_train_test.py --yaml=sat2density_cvusa --test_ckpt_path=2cqv8uh4  --sty_img=0014628.jpg
+CUDA_VISIBLE_DEVICES=1 python offline_train_test.py --yaml=sat2density_cvusa --test_ckpt_path=2cqv8uh4  --sty_img=0027413.jpg
+CUDA_VISIBLE_DEVICES=1 python offline_train_test.py --yaml=sat2density_cvusa --test_ckpt_path=2cqv8uh4  --sty_img=0021324.jpg
+CUDA_VISIBLE_DEVICES=1 python offline_train_test.py --yaml=sat2density_cvusa --test_ckpt_path=2cqv8uh4  --sty_img=0013073.jpg
+CUDA_VISIBLE_DEVICES=1 python offline_train_test.py --yaml=sat2density_cvusa --test_ckpt_path=2cqv8uh4  --sty_img=0028546.jpg
