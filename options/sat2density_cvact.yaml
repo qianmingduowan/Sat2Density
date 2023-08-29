@@ -88,3 +88,4 @@ optim:
 ######## for test, if only style, will random choice one style for save dir
 only_style: 
 only_img:
+save_dir: 

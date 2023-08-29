@@ -15,9 +15,13 @@ demo_img: __-DFIFxvZBCn1873qkqXA_grdView.png
 # for testing
 sty_img:
 
+sky_img:
+
 # only for illumination interpolation visualization
 sty_img1:
 sty_img2:
+sky_img1:
+sky_img2:
 
 data:                                                       
     sky_mask:                                               

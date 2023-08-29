@@ -10,7 +10,6 @@ os.environ['WANDB_MODE'] = 'dryrun'
 def main():
     log.process(os.getpid())
     log.title("[{}] (PyTorch code for testing Sat2Density and debug".format(sys.argv[0]))
-
     opt_cmd = options.parse_arguments(sys.argv[1:])
     opt = options.set(opt_cmd=opt_cmd)
     if opt.task in ["train" , "Train"]:
