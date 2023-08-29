@@ -421,7 +421,7 @@ class BaseModel(ABC):
                     output_RGB = self.netG.denoise_model(generator_inputs,z)
 
                     save_img = output_RGB.cpu()
-                    name = 'img'+str(int(i)) + ".png"
+                    name = 'img{:03d}.png'.format(i)
                     if not os.path.exists('vis_interpolation'):
                         os.mkdir('vis_interpolation')
                     torchvision.utils.save_image(save_img,os.path.join('vis_interpolation',name))
