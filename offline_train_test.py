@@ -12,12 +12,13 @@ def main():
     log.title("[{}] (PyTorch code for testing Sat2Density and debug".format(sys.argv[0]))
     opt_cmd = options.parse_arguments(sys.argv[1:])
     opt = options.set(opt_cmd=opt_cmd)
+    if opt.test_ckpt_path and opt.task not in ["test" , "val","vis_test",'test_speed','test_vid','test_sty','test_interpolation']:
+        opt.task = "test"
     if opt.task in ["train" , "Train"]:
         opt.isTrain = True
     else:
         opt.isTrain = False
-    if opt.test_ckpt_path and opt.task not in ["test" , "val","vis_test",'test_speed','test_vid','test_sty','test_interpolation']:
-        opt.task = "test"
+
     opt.name = opt.yaml if opt.name is None else opt.name
     mode = importlib.import_module("model.{}".format(opt.model))
     m = mode.Model(opt)

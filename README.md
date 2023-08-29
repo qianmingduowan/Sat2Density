@@ -4,7 +4,7 @@
 >
 > IEEE/CVF International Conference on Computer Vision (ICCV), 2023
 >
-> [Project](https://sat2density.github.io/) | [Paper](https://arxiv.org/abs/2303.14672) | [Data]() | [Install.md]()
+> [Project](https://sat2density.github.io/) | [Paper](https://arxiv.org/abs/2303.14672) | [Data]() | [Install.md](docs/INSTALL.md)
 
 
 ## Software Installation 
@@ -24,6 +24,8 @@ bash scripts/download_weights.sh
 
 ## Quick Start demo
 Synthesis video
+
+need GUI for visualization and interactive drawing tracks, details can be seen in 'inference/select_points.py'.
 
 `
 bash inference/quick_demo_video.sh
@@ -63,15 +65,6 @@ To test synthesis ground videos
 ```bash
 bash inference/synthesis_video.sh
 ```
-
-To test illumination interpolation
-```bash 
-#demo
-python offline_train_test.py --task=test_interpolation --yaml=sat2density_cvact --test_ckpt_path=2u87bj8w 
---sty_img1=_jaGbjgbHAe78_VhcPtmZQ_grdView.png --sty_img2=pdZmLHYEhe2PHj_8-WHMhw_grdView.png --demo_img=VAMM6sIEbYAY5E6ZD_RMKg_satView_polish.png
-```
-
-
 
 ## Training
 

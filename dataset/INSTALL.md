@@ -20,7 +20,6 @@ Last，the users should organize the dataset just like:
 │   ├── satview_correct
 │   ├── pano_sky_mask
 │   ├── ACT_data.mat
-│   │   ├── java
 └── CVUSA
 │   ├── bingmap
 │   │   ├── 19
