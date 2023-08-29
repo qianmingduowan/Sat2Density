@@ -77,7 +77,10 @@ def select_points(sat_image):
     x_new, y_new = splev(u_new, tck)
 
     smooth_path = np.array([x_new,y_new]).T
-    return pixels, smooth_path
+
+    angles = np.arctan2(y_new[1:]-y_new[:-1],x_new[1:]-x_new[:-1])
+    
+    return pixels, angles, smooth_path
 
 def volume2pyvista(volume_data):
     import pyvista as pv 
@@ -134,10 +137,11 @@ def test_vid(model, opt):
     
     model.style_temp = model.sky_histc
     
-    pixels, smooth_path = select_points(sat_image=sat.permute(1,2,0).numpy())
+    pixels, angles, smooth_path = select_points(sat_image=sat.permute(1,2,0).numpy())
 
     rendered_image_list = []
     rendered_depth_list = []
+    sat_image_list = []
 
     volume_data = None
 
@@ -153,6 +157,7 @@ def test_vid(model, opt):
         rendered_depth_list.append(
             model.out_put.depth[0,0].cpu().numpy()
         )
+        
 
     sat_opacity, sat_depth = render_sat(opt,model.out_put.voxel)
     
@@ -195,6 +200,9 @@ def test_vid(model, opt):
 
         plt.imsave(osp.join(opt.save_dir,'rendered_images+depths','{:05d}.png'.format(i)), image_and_depth)
     
+    os.makedirs(osp.join(opt.save_dir,'sat_images'), exist_ok=True)
+    for i, img in enumerate(sat_image_list):
+        plt.imsave(osp.join(opt.save_dir,'sat_images','{:05d}.png'.format(i)), img)
     print('Done')
 
 
