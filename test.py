@@ -21,6 +21,7 @@ from torch.utils.data import default_convert,default_collate
 
 from model.geometry_transform import render_sat
 import cv2 
+import imageio 
 
 def get_checkpoint(opt):
     if opt.test_ckpt_path == '2u87bj8w':
@@ -76,7 +77,10 @@ def select_points(sat_image):
     x_new, y_new = splev(u_new, tck)
 
     smooth_path = np.array([x_new,y_new]).T
-    return pixels, smooth_path
+    
+    angles = np.arctan2(y_new[1:]-y_new[:-1],x_new[1:]-x_new[:-1])
+    
+    return pixels, angles, smooth_path
 
 def volume2pyvista(volume_data):
     import pyvista as pv 
@@ -133,10 +137,11 @@ def test_vid(model, opt):
     
     model.style_temp = model.sky_histc
     
-    pixels, smooth_path = select_points(sat_image=sat.permute(1,2,0).numpy())
+    pixels, angles, smooth_path = select_points(sat_image=sat.permute(1,2,0).numpy())
 
     rendered_image_list = []
     rendered_depth_list = []
+    
 
     volume_data = None
 
@@ -152,6 +157,7 @@ def test_vid(model, opt):
         rendered_depth_list.append(
             model.out_put.depth[0,0].cpu().numpy()
         )
+        
 
     sat_opacity, sat_depth = render_sat(opt,model.out_put.voxel)
     
@@ -165,8 +171,8 @@ def test_vid(model, opt):
 
     # save rendered images 
     os.makedirs(osp.join(opt.save_dir,'rendered_images'), exist_ok=True)
+
     for i, img in enumerate(rendered_image_list):
-        img = np.clip(img, 0, 1)
         plt.imsave(osp.join(opt.save_dir,'rendered_images','{:05d}.png'.format(i)), img)
 
     os.makedirs(osp.join(opt.save_dir,'rendered_depth'), exist_ok=True)
@@ -181,6 +187,29 @@ def test_vid(model, opt):
         image_and_depth = np.concatenate((rendered_image_list[i], depth), axis=0)
 
         plt.imsave(osp.join(opt.save_dir,'rendered_images+depths','{:05d}.png'.format(i)), image_and_depth)
+    
+    os.makedirs(osp.join(opt.save_dir,'sat_images'), exist_ok=True)
+    
+    for i, (x,y) in enumerate(pixels):
+        
+        
+        # plt.plot(x, y, 'o', color='red')
+
+        sat_rgb = sat.permute(1,2,0).numpy()
+        sat_rgb = np.array(sat_rgb*255, dtype=np.uint8)
+        fig = plt.figure()
+        fig.set_size_inches(1,1,forward=False)
+        ax = plt.Axes(fig, [0., 0., 1., 1.])
+        ax.set_axis_off()
+        ax.imshow(sat_rgb)
+        ax.plot(pixels[:i+1,0], pixels[:i+1,1], 'r-', color='red')
+        ax.plot(x, y, 'o', color='red', markersize=2)
+        # if i < len(pixels)-1:
+        # #     ax.plot([x,pixels[0,0]],[y,pixels[0,1]],'r-')
+        # # else:
+        #     ax.plot([x,pixels[i+1,0]],[y,pixels[i+1,1]],'r-')
+        fig.add_axes(ax)
+        plt.savefig(osp.join(opt.save_dir,'sat_images','{:05d}.png'.format(i)),bbox_inches='tight', pad_inches=0, dpi=256)
         
     print('Done')
 
@@ -205,6 +234,10 @@ def main():
 
     # m.load_dataset(opt)
     m.build_networks(opt)
+
+    if os.path.exists(opt.save_dir):
+        import shutil
+        shutil.rmtree(opt.save_dir)
 
     test_vid(m, opt)
     

@@ -6,40 +6,53 @@
 >
 > [Project](https://sat2density.github.io/) | [Paper](https://arxiv.org/abs/2303.14672) | [Data]() | [Install.md](docs/INSTALL.md)
 
+> <p align="center">
+>    <img src="docs/figures/demo/case1.sat.gif" alt="drawing" width="256">
+>    <img src="docs/figures/demo/case1.render.gif" alt="drawing" width="512">
+> </p>
+> <p align="center">
+>    <img src="docs/figures/demo/case2.sat.gif" alt="drawing" width="256">
+>    <img src="docs/figures/demo/case2.render.gif" alt="drawing" width="512">
+> </p>
+> <p align="center">
+>    <img src="docs/figures/demo/case3.sat.gif" alt="drawing" width="256">
+>    <img src="docs/figures/demo/case3.render.gif" alt="drawing" width="512">
+> </p>
+> <p align="center">
+>    <img src="docs/figures/demo/case4.sat.gif" alt="drawing" width="256">
+>    <img src="docs/figures/demo/case4.render.gif" alt="drawing" width="512">
+> </p>
 
-## Software Installation 
-For installation, please check out [install.md](docs/INSTALL.md).
-
-
-## Hardware Requirement
-We trained our model using 1 V100 32GB GPU. Training took about 20 hours.
-
-
-
-
-## Pre-trained model
-`
+## Checkpoints Downloading
+> Two checkpoints for CVACT and CVUSA can be found from [thisurl](https://github.com/sat2density/checkpoints/releases). You can also run the following command to download them.
+```
 bash scripts/download_weights.sh
-`
+```
 
-## Quick Start demo
-Synthesis video
+## QuickStart Demo
+### Video Synthesis
+  #### Example Usage
+  ```
+  python test.py --yaml=sat2density_cvact \
+    --test_ckpt_path=2u87bj8w \
+    --task=test_vid \
+    --demo_img=demo_img/case1/satview-input.png  \
+    --sty_img=demo_img/case1/groundview.image.png  \
+    --save_dir=results/case1
+  ```
+  #### 
 
-need GUI for visualization and interactive drawing tracks, details can be seen in 'inference/select_points.py'.
-
-`
-bash inference/quick_demo_video.sh
-`
-
-Illumination interpolation
-
-`
+### Illumination Interpolation
+```
 bash inference/quick_demo_interpolation.sh
-`
+```
+
 
 ## Train & Inference
-### data preparation
-For data preparation, please check out [data.md](dataset/INSTALL.md).
+- *We trained our model using 1 V100 32GB GPU. The training phase will take about 20 hours.*
+- *For data preparation, please check out [data.md](dataset/INSTALL.md).*
+
+
 
 
 ### Inference
