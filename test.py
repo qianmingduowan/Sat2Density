@@ -21,6 +21,7 @@ from torch.utils.data import default_convert,default_collate
 
 from model.geometry_transform import render_sat
 import cv2 
+import imageio 
 
 def get_checkpoint(opt):
     if opt.test_ckpt_path == '2u87bj8w':
@@ -165,9 +166,21 @@ def test_vid(model, opt):
 
     # save rendered images 
     os.makedirs(osp.join(opt.save_dir,'rendered_images'), exist_ok=True)
+
+    fourcc = cv2.VideoWriter_fourcc('M', 'P', '4', 'V')
+    
+    cvout = cv2.VideoWriter(
+        osp.join(opt.save_dir,'rendered_images.mp4'),
+        fourcc,12,(512,256)
+    )
+    
+
     for i, img in enumerate(rendered_image_list):
-        img = np.clip(img, 0, 1)
         plt.imsave(osp.join(opt.save_dir,'rendered_images','{:05d}.png'.format(i)), img)
+        im = cv2.imread(osp.join(opt.save_dir,'rendered_images','{:05d}.png'.format(i)))
+        cvout.write(im)
+
+    cvout.release()
 
     os.makedirs(osp.join(opt.save_dir,'rendered_depth'), exist_ok=True)
 
@@ -181,7 +194,7 @@ def test_vid(model, opt):
         image_and_depth = np.concatenate((rendered_image_list[i], depth), axis=0)
 
         plt.imsave(osp.join(opt.save_dir,'rendered_images+depths','{:05d}.png'.format(i)), image_and_depth)
-        
+    
     print('Done')
 
 
