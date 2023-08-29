@@ -12,7 +12,7 @@ class Model(BaseModel):
         Parameters:
             opt (Option class)-- stores all the experiment flags; needs to be a subclass of BaseOptions
         """
-        BaseModel.__init__(self, opt)
+        BaseModel.__init__(self, opt,wandb)
         self.loss_names = ['G_GAN', 'G_L1', 'D_real', 'D_fake']
 
 
