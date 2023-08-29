@@ -9,10 +9,16 @@
 > <p align="center">
 >    <img src="docs/figures/demo/case1.sat.gif" alt="drawing" width="150">
 >    <img src="docs/figures/demo/case1.render.gif" alt="drawing" width="300">
+> </p>
+> <p align="center">
 >    <img src="docs/figures/demo/case2.sat.gif" alt="drawing" width="150">
 >    <img src="docs/figures/demo/case2.render.gif" alt="drawing" width="300">
+> </p>
+> <p align="center">
 >    <img src="docs/figures/demo/case3.sat.gif" alt="drawing" width="150">
 >    <img src="docs/figures/demo/case3.render.gif" alt="drawing" width="300">
+> </p>
+> <p align="center">
 >    <img src="docs/figures/demo/case4.sat.gif" alt="drawing" width="150">
 >    <img src="docs/figures/demo/case4.render.gif" alt="drawing" width="300">
 > </p>
