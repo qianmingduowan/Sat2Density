@@ -7,8 +7,14 @@
 > [Project](https://sat2density.github.io/) | [Paper](https://arxiv.org/abs/2303.14672) | [Data]() | [Install.md](docs/INSTALL.md)
 
 > <p align="center">
->    <img src="docs/figures/case1-sat.gif" alt="drawing" width="256">
->    <img src="docs/figures/case1-render.gif" alt="drawing" width="512">
+>    <img src="docs/figures/demo/case1.sat.gif" alt="drawing" width="150">
+>    <img src="docs/figures/demo/case1.render.gif" alt="drawing" width="300">
+>    <img src="docs/figures/demo/case2.sat.gif" alt="drawing" width="150">
+>    <img src="docs/figures/demo/case2.render.gif" alt="drawing" width="300">
+>    <img src="docs/figures/demo/case3.sat.gif" alt="drawing" width="150">
+>    <img src="docs/figures/demo/case3.render.gif" alt="drawing" width="300">
+>    <img src="docs/figures/demo/case4.sat.gif" alt="drawing" width="150">
+>    <img src="docs/figures/demo/case4.render.gif" alt="drawing" width="300">
 > </p>
 
 ## Checkpoints Downloading
@@ -19,6 +25,7 @@ bash scripts/download_weights.sh
 
 ## QuickStart Demo
 ### Video Synthesis
+  #### Example Usage
   ```
   python test.py --yaml=sat2density_cvact \
     --test_ckpt_path=2u87bj8w \
@@ -27,6 +34,7 @@ bash scripts/download_weights.sh
     --sty_img=demo_img/case1/groundview.image.png  \
     --save_dir=results/case1
   ```
+  #### 
 
 ### Illumination Interpolation
 ```
