@@ -6,6 +6,10 @@
 >
 > [Project](https://sat2density.github.io/) | [Paper](https://arxiv.org/abs/2303.14672) | [Data]() | [Install.md](docs/INSTALL.md)
 
+> <p align="center">
+>    <img src="docs/figures/case1-sat.gif" alt="drawing" width="150">
+>    <img src="docs/figures/case1-render.gif" alt="drawing" width="300">
+> </p>
 
 ## Software Installation 
 For installation, please check out [install.md](docs/INSTALL.md).

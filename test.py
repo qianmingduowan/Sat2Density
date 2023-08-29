@@ -77,7 +77,7 @@ def select_points(sat_image):
     x_new, y_new = splev(u_new, tck)
 
     smooth_path = np.array([x_new,y_new]).T
-
+    
     angles = np.arctan2(y_new[1:]-y_new[:-1],x_new[1:]-x_new[:-1])
     
     return pixels, angles, smooth_path
@@ -141,7 +141,7 @@ def test_vid(model, opt):
 
     rendered_image_list = []
     rendered_depth_list = []
-    sat_image_list = []
+    
 
     volume_data = None
 
@@ -172,20 +172,8 @@ def test_vid(model, opt):
     # save rendered images 
     os.makedirs(osp.join(opt.save_dir,'rendered_images'), exist_ok=True)
 
-    fourcc = cv2.VideoWriter_fourcc('M', 'P', '4', 'V')
-    
-    cvout = cv2.VideoWriter(
-        osp.join(opt.save_dir,'rendered_images.mp4'),
-        fourcc,12,(512,256)
-    )
-    
-
     for i, img in enumerate(rendered_image_list):
         plt.imsave(osp.join(opt.save_dir,'rendered_images','{:05d}.png'.format(i)), img)
-        im = cv2.imread(osp.join(opt.save_dir,'rendered_images','{:05d}.png'.format(i)))
-        cvout.write(im)
-
-    cvout.release()
 
     os.makedirs(osp.join(opt.save_dir,'rendered_depth'), exist_ok=True)
 
@@ -201,8 +189,28 @@ def test_vid(model, opt):
         plt.imsave(osp.join(opt.save_dir,'rendered_images+depths','{:05d}.png'.format(i)), image_and_depth)
     
     os.makedirs(osp.join(opt.save_dir,'sat_images'), exist_ok=True)
-    for i, img in enumerate(sat_image_list):
-        plt.imsave(osp.join(opt.save_dir,'sat_images','{:05d}.png'.format(i)), img)
+    
+    for i, (x,y) in enumerate(pixels):
+        
+        
+        # plt.plot(x, y, 'o', color='red')
+
+        sat_rgb = sat.permute(1,2,0).numpy()
+        sat_rgb = np.array(sat_rgb*255, dtype=np.uint8)
+        fig = plt.figure()
+        fig.set_size_inches(1,1,forward=False)
+        ax = plt.Axes(fig, [0., 0., 1., 1.])
+        ax.set_axis_off()
+        ax.imshow(sat_rgb)
+        ax.plot(pixels[:i+1,0], pixels[:i+1,1], 'r-', color='red')
+        ax.plot(x, y, 'o', color='red', markersize=2)
+        # if i < len(pixels)-1:
+        # #     ax.plot([x,pixels[0,0]],[y,pixels[0,1]],'r-')
+        # # else:
+        #     ax.plot([x,pixels[i+1,0]],[y,pixels[i+1,1]],'r-')
+        fig.add_axes(ax)
+        plt.savefig(osp.join(opt.save_dir,'sat_images','{:05d}.png'.format(i)),bbox_inches='tight', pad_inches=0, dpi=256)
+        
     print('Done')
 
 
@@ -226,6 +234,10 @@ def main():
 
     # m.load_dataset(opt)
     m.build_networks(opt)
+
+    if os.path.exists(opt.save_dir):
+        import shutil
+        shutil.rmtree(opt.save_dir)
 
     test_vid(m, opt)
     
