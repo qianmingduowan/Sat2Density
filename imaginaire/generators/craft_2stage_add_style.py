@@ -46,7 +46,6 @@ class Generator(nn.Module):
     def forward(self, inputs, style_img=None,opt=None):
         # predicted height of satellite images
         estimated_height = self.depth_model(inputs)
-
         geo_outputs = geometry_transform.render(opt,inputs,estimated_height,self.pano_direction,PE=self.PE)
         generator_inputs,opacity,depth = geo_outputs['rgb'],geo_outputs['opacity'],geo_outputs['depth']
         if 'voxel' in geo_outputs.keys():
