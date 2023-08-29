@@ -7,20 +7,20 @@
 > [Project](https://sat2density.github.io/) | [Paper](https://arxiv.org/abs/2303.14672) | [Data]() | [Install.md](docs/INSTALL.md)
 
 > <p align="center">
->    <img src="docs/figures/demo/case1.sat.gif" alt="drawing" width="150">
->    <img src="docs/figures/demo/case1.render.gif" alt="drawing" width="300">
+>    <img src="docs/figures/demo/case1.sat.gif" alt="drawing" width="256">
+>    <img src="docs/figures/demo/case1.render.gif" alt="drawing" width="512">
 > </p>
 > <p align="center">
->    <img src="docs/figures/demo/case2.sat.gif" alt="drawing" width="150">
->    <img src="docs/figures/demo/case2.render.gif" alt="drawing" width="300">
+>    <img src="docs/figures/demo/case2.sat.gif" alt="drawing" width="256">
+>    <img src="docs/figures/demo/case2.render.gif" alt="drawing" width="512">
 > </p>
 > <p align="center">
->    <img src="docs/figures/demo/case3.sat.gif" alt="drawing" width="150">
->    <img src="docs/figures/demo/case3.render.gif" alt="drawing" width="300">
+>    <img src="docs/figures/demo/case3.sat.gif" alt="drawing" width="256">
+>    <img src="docs/figures/demo/case3.render.gif" alt="drawing" width="512">
 > </p>
 > <p align="center">
->    <img src="docs/figures/demo/case4.sat.gif" alt="drawing" width="150">
->    <img src="docs/figures/demo/case4.render.gif" alt="drawing" width="300">
+>    <img src="docs/figures/demo/case4.sat.gif" alt="drawing" width="256">
+>    <img src="docs/figures/demo/case4.render.gif" alt="drawing" width="512">
 > </p>
 
 ## Checkpoints Downloading
