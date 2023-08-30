@@ -8,18 +8,22 @@
 
 > <p align="center">
 >    <img src="docs/figures/demo/case1.sat.gif" alt="drawing" width="256">
+>    <img src="docs/figures/demo-density/case1.gif" alt="drawing" height="256">
 >    <img src="docs/figures/demo/case1.render.gif" alt="drawing" width="512">
 > </p>
 > <p align="center">
 >    <img src="docs/figures/demo/case2.sat.gif" alt="drawing" width="256">
+>    <img src="docs/figures/demo-density/case2.gif" alt="drawing" height="256">
 >    <img src="docs/figures/demo/case2.render.gif" alt="drawing" width="512">
 > </p>
 > <p align="center">
 >    <img src="docs/figures/demo/case3.sat.gif" alt="drawing" width="256">
+>    <img src="docs/figures/demo-density/case3.gif" alt="drawing" height="256">
 >    <img src="docs/figures/demo/case3.render.gif" alt="drawing" width="512">
 > </p>
 > <p align="center">
 >    <img src="docs/figures/demo/case4.sat.gif" alt="drawing" width="256">
+>    <img src="docs/figures/demo-density/case4.gif" alt="drawing" height="256">
 >    <img src="docs/figures/demo/case4.render.gif" alt="drawing" width="512">
 > </p>
 
