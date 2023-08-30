@@ -43,10 +43,18 @@ bash scripts/download_weights.sh
   #### 
 
 ### Illumination Interpolation
-```
+<!-- ```
 bash inference/quick_demo_interpolation.sh
+``` -->
 ```
-
+python test.py --task=test_interpolation \
+--yaml=sat2density_cvact \
+--test_ckpt_path=2u87bj8w \
+--sty_img1=demo_img/case9/groundview.image.png \
+--sty_img2=demo_img/case7/groundview.image.png \
+--demo_img=demo_img/case3/satview-input.png \
+--save_dir=results/case2
+```
 
 ## Train & Inference
 - *We trained our model using 1 V100 32GB GPU. The training phase will take about 20 hours.*

@@ -18,8 +18,9 @@ from matplotlib.widgets import Cursor
 from PIL import Image
 from scipy.interpolate import interp1d, splev, splprep
 from torch.utils.data import default_convert,default_collate
+import torchvision
 
-from model.geometry_transform import render_sat
+from model.geometry_transform import render_sat,render
 import cv2 
 import imageio 
 
@@ -91,6 +92,17 @@ def volume2pyvista(volume_data):
     grid.point_data['values'] = volume_data.flatten(order='F')
     return grid
 
+
+def img_pair2vid(sat_list,save_dir,media_path= 'interpolation.mp4'):
+    fourcc = cv2.VideoWriter_fourcc('M', 'P', '4', 'V')
+    out = cv2.VideoWriter(media_path, fourcc, 12.0, (512, 128))
+    for i  in range(len(sat_list)):
+
+        img1 = cv2.imread(os.path.join( save_dir , sat_list[i]))
+
+        out.write(img1)
+    out.release()
+
 @torch.no_grad()
 def test_vid(model, opt):
     ckpt = torch.load(opt.test_ckpt_path, map_location='cpu')
@@ -117,13 +129,8 @@ def test_vid(model, opt):
 
     if opt.data.sky_mask:
         sky = img_read(sky_imgpath, size=opt.data.pano_size, datatype='L') 
-        black_ground = torch.zeros_like(pano)
-        input_a = (pano*sky+black_ground*(1-sky))
-        if opt.data.histo_mode == 'grey':
-            sky_histc = input_a.histc()[10:]
-        elif opt.data.histo_mode in ['rgb','RGB']:
-            sky_histc = [torch.histc(input_a[i])[10:] for i in range(3)]
-            sky_histc = torch.cat(sky_histc)
+        input_a = pano*sky
+        sky_histc = torch.cat([input_a[i].histc()[10:] for i in reversed(range(3))])
         input_dict['sky_histc'] = sky_histc
         input_dict['sky_mask'] = sky
     else:
@@ -214,6 +221,86 @@ def test_vid(model, opt):
     print('Done')
 
 
+@torch.no_grad()
+def test_interpolation(model,opt):
+    ckpt = torch.load(opt.test_ckpt_path, map_location='cpu')
+    model.netG.load_state_dict(ckpt['netG'])
+    model.netG.eval()
+
+
+
+
+    sat = img_read(opt.demo_img , size=opt.data.sat_size)
+    pano1 = img_read(opt.sty_img1 , size=opt.data.pano_size)
+    pano2 = img_read(opt.sty_img2 , size=opt.data.pano_size)
+    
+
+    input_dict = {}
+    input_dict['sat'] = sat
+    input_dict['paths'] = opt.demo_img 
+
+    # black_ground = torch.zeros_like(pano1)
+    sky_imgpath1 = opt.sty_img1.replace('image','sky')
+    sky_imgpath2 = opt.sty_img2.replace('image','sky')
+
+    sky = img_read(sky_imgpath1, size=opt.data.pano_size, datatype='L') 
+    input_a = pano1*sky
+    sky_histc1 = torch.cat([input_a[i].histc()[10:] for i in reversed(range(3))])
+
+    # for idx in range(len(input_a)):
+    #     if idx == 0:
+    #         sky_histc1 = input_a[idx].histc()[10:]
+    #     else:
+    #         sky_histc1 = torch.cat([input_a[idx].histc()[10:],sky_histc1],dim=0)
+
+    sky = img_read(sky_imgpath2, size=opt.data.pano_size, datatype='L') 
+    input_b = pano2*sky
+    sky_histc2 = torch.cat([input_b[i].histc()[10:] for i in reversed(range(3))])
+    # for idx in range(len(input_b)):
+    #     if idx == 0:
+    #         sky_histc2 = input_b[idx].histc()[10:]
+    #     else:
+    #         sky_histc2 = torch.cat([input_b[idx].histc()[10:],sky_histc2],dim=0)
+
+    for key in input_dict.keys():
+        if isinstance(input_dict[key], torch.Tensor):
+            input_dict[key] = input_dict[key].unsqueeze(0)
+
+    model.set_input(input_dict)
+    pixels = [(128,128)]
+    
+    x,y =  pixels[0]
+    opt.origin_H_W = [(y-128)/128 , (x-128)/128]
+    print(opt.origin_H_W)
+
+    estimated_height = model.netG.depth_model(model.real_A)
+    geo_outputs = render(opt,model.real_A,estimated_height,model.netG.pano_direction,PE=model.netG.PE)
+    generator_inputs,opacity,depth = geo_outputs['rgb'],geo_outputs['opacity'],geo_outputs['depth']
+    if model.netG.gen_cfg.cat_opa:
+        generator_inputs = torch.cat((generator_inputs,opacity),dim=1)
+    if model.netG.gen_cfg.cat_depth:
+        generator_inputs = torch.cat((generator_inputs,depth),dim=1)
+    _, _, z1 = model.netG.style_encode(sky_histc1.unsqueeze(0).to(model.device))
+    _, _, z2 = model.netG.style_encode(sky_histc2.unsqueeze(0).to(model.device))
+    num_inter = 60
+    for i in range(num_inter):
+        z = z1 * (1-i/(num_inter-1)) + z2* (i/(num_inter-1))
+        z = model.netG.style_model(z)
+        output_RGB = model.netG.denoise_model(generator_inputs,z)
+
+        save_img = output_RGB.cpu()
+        name = 'img{:03d}.png'.format(i)
+        torchvision.utils.save_image(save_img,os.path.join(opt.save_dir,name))
+
+    img_list = sorted(os.listdir(opt.save_dir))
+    sat_list = []
+    for img in img_list:
+        sat_list.append(img)
+    media_path = os.path.join(opt.save_dir,'interpolation.mp4')
+
+    img_pair2vid(sat_list,opt.save_dir,media_path)
+    print('Done, save 2 ',media_path)
+
 def main():
     log.process(os.getpid())
     log.title("[{}] (PyTorch code for testing Sat2Density and debug".format(sys.argv[0]))
@@ -238,8 +325,13 @@ def main():
     if os.path.exists(opt.save_dir):
         import shutil
         shutil.rmtree(opt.save_dir)
-
-    test_vid(m, opt)
+    if opt.task == 'test_vid':
+        test_vid(m, opt)
+    if opt.task == 'test_interpolation':
+        assert opt.sty_img1
+        assert opt.sty_img2
+        os.makedirs(opt.save_dir, exist_ok=True)
+        test_interpolation(m,opt)
     
     # import pdb; pdb.set_trace()
     

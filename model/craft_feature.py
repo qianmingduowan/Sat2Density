@@ -27,12 +27,12 @@ class Model(BaseModel):
             self.sky_histc: the histogram of selected sky
         """     
         self.real_A = input['sat' ].to(self.device)
-        self.real_B = input['pano'].to(self.device)
+        self.real_B = input['pano'].to(self.device) if 'pano' in input else None # for testing
         self.image_paths = input['paths']
         if self.opt.data.sky_mask:
-            self.sky_mask = input['sky_mask'].to(self.device)
+            self.sky_mask = input['sky_mask'].to(self.device) if 'sky_mask' in input else None # for testing
         if self.opt.data.histo_mode and self.opt.data.sky_mask:
-            self.sky_histc = input['sky_histc'].to(self.device)
+            self.sky_histc = input['sky_histc'].to(self.device) if 'sky_histc' in input else None # for testing
         else: self.sky_histc = None
 
     def forward(self,opt):
