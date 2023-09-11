@@ -48,6 +48,7 @@ bash scripts/download_weights.sh
     --save_dir=results/case1
   ```
   #### 
+We visualize our .vtk shape files with Paraview.
 
 ### Illumination Interpolation
 <!-- ```
