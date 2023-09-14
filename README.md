@@ -4,7 +4,7 @@
 >
 > IEEE/CVF International Conference on Computer Vision (ICCV), 2023
 >
-> [Project](https://sat2density.github.io/) | [Paper](https://arxiv.org/abs/2303.14672) | [Data](dataset/INSTALL.md) | [Install.md](docs/INSTALL.md)
+> [Project Page](https://sat2density.github.io/) | [Paper](https://arxiv.org/abs/2303.14672) | [Data](dataset/INSTALL.md) | [Install.md](docs/INSTALL.md)
 
 > <p align="center" float="left">
 >    <img src="docs/figures/demo/case1.sat.gif" alt="drawing" width="19%">  
@@ -30,8 +30,10 @@
 >    <img src="docs/figures/demo/case4.render.gif" alt="drawing" width="38%">
 > </p>
 
+See the [Project Page](https://sat2density.github.io/) for more results and a brief video introduction to Sat2Density.
+
 ## Checkpoints Downloading
-> Two checkpoints for CVACT and CVUSA can be found from [thisurl](https://github.com/sat2density/checkpoints/releases). You can also run the following command to download them.
+> Two checkpoints for CVACT and CVUSA can be found from [this url](https://github.com/sat2density/checkpoints/releases). You can also run the following command to download them.
 ```
 bash scripts/download_weights.sh
 ```
