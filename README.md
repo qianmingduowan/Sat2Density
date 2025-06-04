@@ -5,6 +5,10 @@
 > IEEE/CVF International Conference on Computer Vision (ICCV), 2023
 >
 > [Project Page](https://sat2density.github.io/) | [Paper](https://arxiv.org/abs/2303.14672) | [Data](dataset/INSTALL.md) | [Install.md](scripts/INSTALL.md)
+>
+> ## 💡 Changelog
+- [2025/05/22]. The journal extension "Seeing through Satellite Images at Street Views" is available on [Arxiv](https://qianmingduowan.github.io/sat2density-pp/).
+
 
 > <p align="center" float="left">
 >    <img src="docs/figures/demo/case1.sat.gif" alt="drawing" width="19%">  
@@ -119,6 +123,16 @@ If you use this code for your research, please cite
     month     = {October},
     year      = {2023},
     pages     = {3683-3692}
+}
+
+@misc{Sat2Density++,
+      title={Seeing through Satellite Images at Street Views}, 
+      author={Ming Qian and Bin Tan and Qiuyu Wang and Xianwei Zheng and Hanjiang Xiong and Gui-Song Xia and Yujun Shen and Nan Xue},
+      year={2025},
+      eprint={2505.17001},
+      archivePrefix={arXiv},
+      primaryClass={cs.CV},
+      url={https://arxiv.org/abs/2505.17001}, 
 }
 ```
 
