@@ -89,3 +89,7 @@ optim:
 only_style: 
 only_img:
 save_dir: 
+
+# for test
+position_path:
+txt_file:

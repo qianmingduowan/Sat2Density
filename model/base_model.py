@@ -50,11 +50,24 @@ class BaseModel(ABC):
         self.val_loader = None 
         self.sty_loader = None
         self.loss_fn_alex = lpips.LPIPS(net='alex',eval_mode=True).cuda()
-        if opt.task=='test':
-            self.loss_fn_sque = lpips.LPIPS(net='squeeze',eval_mode=True).cuda()
+        self.loss_fn_sque = lpips.LPIPS(net='squeeze',eval_mode=True).cuda()
         self.mseloss = torch.nn.MSELoss(True,True)
         self.criteria = {}
         self.weights = {}
+        self.random_style_fortest = opt.random_style
+        self.vis_dir = os.path.join(opt.vis_dir,opt.data.dataset)
+        self.real_B_path = os.path.join(self.vis_dir,'real_B')
+        if self.random_style_fortest:
+            #             data:                                            # data options
+            #   dataset: CVACT_Shi                           # dataset name
+            #   root: ./dataset/CVACT/  
+            self.vis_dir = os.path.join(self.vis_dir,'random_style')
+            self.histo_numpy = np.load(os.path.join(opt.data.root,'histo_conference.npy'))
+        else:
+            self.vis_dir = os.path.join(self.vis_dir,'norm')
+        os.makedirs(self.vis_dir,exist_ok=True)
+        print('if, vis test, vis_dir:',self.vis_dir)
+        
         if hasattr(opt.optim.loss_weight, 'GaussianKL'):
             if opt.optim.loss_weight.GaussianKL:
                 self.criteria['GaussianKL'] = GaussianKLLoss()
@@ -207,6 +220,9 @@ class BaseModel(ABC):
                 # if false: use the sky of corresponding GT
                 if opt.sty_img:
                     self.sky_histc = self.style_temp
+                if self.random_style_fortest:
+                    # select self.real_A num of sky histogram randomly
+                    self.sky_histc = torch.from_numpy(self.histo_numpy[np.random.randint(0,self.histo_numpy.shape[0],self.real_A.shape[0])]).to(self.device)
                 
                 self.forward(opt)
                 rmse = torch.sqrt(self.mseloss(self.fake_B*255.,self.real_B*255.)).item()
@@ -217,30 +233,74 @@ class BaseModel(ABC):
                 psnr1 = -10*self.mseloss(self.fake_B,self.real_B).log10().item()
                 ssim_ = ssim(self.real_B, self.fake_B,data_range=1.).item()
                 lpips_ale = torch.mean(self.loss_fn_alex((self.real_B*2.)-1, (2.*self.fake_B)-1)).cpu()
-                if opt.task=='test':
-                    lpips_sque = torch.mean(self.loss_fn_sque((self.real_B*2.)-1, (2.*self.fake_B)-1)).cpu()
-                    lpips_squ_val.append(lpips_sque)
+                lpips_sque = torch.mean(self.loss_fn_sque((self.real_B*2.)-1, (2.*self.fake_B)-1)).cpu()
+                lpips_squ_val.append(lpips_sque)
                 psnr_val.append(psnr1)
                 ssim_val.append(ssim_)
                 lpips_ale_val.append(lpips_ale)
                     
                 if opt.task in ['vis_test']:
-                    if not os.path.exists(opt.vis_dir):
-                        os.mkdir(opt.vis_dir)
+                    if not os.path.exists(self.vis_dir):
+                        os.mkdir(self.vis_dir)
 
                     sat_opacity,sat_depth = render_sat(opt,self.out_put['voxel'])
 
                     self.out_put['depth'] = (self.out_put['depth']/self.out_put['depth'].max())*255.
                     sat_depth = (sat_depth/sat_depth.max())*255.
                     for i in range(len(self.fake_B)):
-                        depth_save  = cv2.applyColorMap(self.out_put['depth'][i].squeeze().cpu().numpy().astype(np.uint8), cv2.COLORMAP_TURBO)
-                        depth_sat_save = cv2.applyColorMap(sat_depth[i].squeeze().cpu().numpy().astype(np.uint8), cv2.COLORMAP_TURBO)
-                        # cat generated ground images, GT ground images, predicted ground depth
-                        torchvision.utils.save_image([self.fake_B[i].cpu(),self.real_B[i].cpu(),torch.flip(torch.from_numpy(depth_save).permute(2,0,1)/255.,[0])],os.path.join(opt.vis_dir,os.path.basename(self.image_paths[i])))
-                        # cat GT satellite images, predicted satellite depth
-                        torchvision.utils.save_image( [self.real_A[i].cpu() ,torch.flip(torch.from_numpy(depth_sat_save).permute(2,0,1)/255.,[0])],os.path.join(opt.vis_dir,os.path.basename(self.image_paths[i]).rsplit('.', 1)[0]+'_sat.jpg'))
-                        # ground opacity
-                        torchvision.utils.save_image([self.out_put['opacity'][i]] ,os.path.join(opt.vis_dir,os.path.basename(self.image_paths[i]).rsplit('.', 1)[0]+'_sat.jpg'))
+                        # only savve the pred street view image
+                        result = self.fake_B[i].cpu()
+                        name = os.path.basename(self.image_paths[i]).rsplit('.', 1)[0]+'.png'
+                        # cv2 save
+                        # covert BGRA to RGB
+                        result = result.permute(1,2,0).numpy()*255
+                        result = cv2.cvtColor(result, cv2.COLOR_RGB2BGR)
+                        cv2.imwrite(os.path.join(self.vis_dir,name),result)
+
+                        # save self.out_put.opacity
+                        opacity_save = self.out_put.opacity[i].permute(1,2,0).cpu().numpy()
+                        # 0.5 is the threshold of opacity
+                        opacity_save[opacity_save<0.5] = 0
+                        opacity_save[opacity_save>=0.5] = 1
+
+                        non_sky_result = self.fake_B[i].permute(1,2,0).cpu().numpy()*opacity_save
+                        non_sky_result = non_sky_result*255
+                        non_sky_result = cv2.cvtColor(non_sky_result, cv2.COLOR_RGB2BGR)
+                        if not os.path.exists(self.vis_dir+'_nosky'):
+                            os.mkdir(self.vis_dir+'_nosky')
+                        if not os.path.exists(self.vis_dir+'_sky'):
+                            os.mkdir(self.vis_dir+'_sky')
+                        cv2.imwrite(os.path.join(self.vis_dir+'_nosky',name),non_sky_result)
+
+                        opacity_save = (1-opacity_save)*255.
+
+                        cv2.imwrite(os.path.join(self.vis_dir+'_sky',name),opacity_save)
+
+                        # save non-sky image
+                        
+
+
+                        # save real_B
+                        
+                        real_B_path = self.real_B_path
+                        if not os.path.exists(real_B_path):
+                            os.mkdir(real_B_path)
+                        save_path = os.path.join(real_B_path,name)
+                        if not os.path.exists(save_path):
+                            gt  = self.real_B[i].cpu()
+                            gt = gt.permute(1,2,0).numpy()*255
+                            gt = cv2.cvtColor(gt, cv2.COLOR_RGB2BGR)
+                            cv2.imwrite(os.path.join(real_B_path,name),gt)
+
+
+
+
+
+                        # depth_save  = cv2.applyColorMap(self.out_put['depth'][i].squeeze().cpu().numpy().astype(np.uint8), cv2.COLORMAP_TURBO)
+                        # depth_sat_save = cv2.applyColorMap(sat_depth[i].squeeze().cpu().numpy().astype(np.uint8), cv2.COLORMAP_TURBO)
+                        # # cat generated ground images, GT ground images, predicted ground depth
+                        # # cat GT satellite images, predicted satellite depth
+                        # # ground opacity
         psnr_avg = np.average(psnr_val)
         ssim_avg = np.average(ssim_val)
 
@@ -319,8 +379,8 @@ class BaseModel(ABC):
                 if opt.sty_img:
                     self.sky_histc = self.style_temp
                 for i,(x,y) in enumerate(pixels):
-                    opt.origin_H_W = [(y-128)/128 , (x-128)/128]
-                    print(opt.origin_H_W)
+                    self.origin_H_W = [(y-128)/128 , (x-128)/128]
+                    print(self.origin_H_W)
                     self.forward(opt)
 
 
@@ -342,6 +402,7 @@ class BaseModel(ABC):
                         grid.origin = (0, 0, 0)
                         grid.point_data['values'] = volume_data.flatten(order='F')
                         grid.save(os.path.join('vis_video',"volume_data.vtk") ) # vtk file could be visualized by ParaView app
+                        print('save volume_data.vtk success!')
 
                         sat_opacity,sat_depth = render_sat(opt,self.out_put['voxel'])
                         sat_depth = (2 - sat_depth)/(opt.data.max_height/15)*255.
@@ -401,8 +462,8 @@ class BaseModel(ABC):
                 self.sky_histc1 = self.style_temp1
                 self.sky_histc2 = self.style_temp2
                 x,y =  pixels[0]
-                opt.origin_H_W = [(y-128)/128 , (x-128)/128]
-                print(opt.origin_H_W)
+                self.origin_H_W = [(y-128)/128 , (x-128)/128]
+                print(self.origin_H_W)
                     
 
                 estimated_height = self.netG.depth_model(self.real_A)
@@ -434,24 +495,83 @@ class BaseModel(ABC):
     def test_speed(self,opt):
         self.netG.eval()
         random_input = torch.randn(1, 3, 256, 256).to(opt.device)
-        starter, ender = torch.cuda.Event(enable_timing=True), torch.cuda.Event(enable_timing=True)
-        iterations  = 300
+        sky_histc = torch.randn(1, 270).to(opt.device)
+        origin_H_W = torch.tensor([[0.,0.]]).to(opt.device)
+        import time
 
-        times = torch.zeros(iterations)
+        def count_parameters_in_MB(model):
+            bytes_per_param = 4  # float32 每个参数占用 4 字节
+            
+            total_params = sum(p.numel() for p in model.parameters())
+            total_MB = (total_params * bytes_per_param) / (1024 ** 2)
+            print(f"\n total parameter: {total_params} , occ {total_MB:.4f} MB")
+
+        # 使用示例
+        count_parameters_in_MB(self.netG)
+        count_parameters_in_MB(self.netG.depth_model)
+        count_parameters_in_MB(self.netG.denoise_model)
+        count_parameters_in_MB(self.netG.style_model)
+        # import ipdb; ipdb.set_trace()
+
+        
         with torch.no_grad():
-            for _ in range(50):
-                _ = self.netG(random_input,None,opt)
-            for iter in range(iterations):
-                starter.record()
-                _ = self.netG(random_input,None,opt)
-                ender.record()
-                torch.cuda.synchronize() 
-                curr_time = starter.elapsed_time(ender) # 计算时间
-                times[iter] = curr_time
-        # print(curr_time)
+            times = []
+            for _ in range(1):
+                torch.cuda.synchronize()
+                time_start = time.time()
+                estimated_height = self.netG.depth_model(random_input)
+                geo_outputs = geometry_transform.render(opt,random_input,estimated_height,self.netG.pano_direction,PE=self.netG.PE,origin_H_W=origin_H_W)
+                generator_inputs,opacity,depth = geo_outputs['rgb'],geo_outputs['opacity'],geo_outputs['depth']
+                if self.netG.gen_cfg.cat_opa:
+                    generator_inputs = torch.cat((generator_inputs,opacity),dim=1)
+                if self.netG.gen_cfg.cat_depth:
+                    generator_inputs = torch.cat((generator_inputs,depth),dim=1)
+                _,_,z = self.netG.style_encode(sky_histc)
+                z = self.netG.style_model(z)
+                torch.cuda.synchronize()
+                time_end = time.time()
+                times.append(time_end-time_start)
+            print('Inference time for scene generation: {:.6f}, FPS: {} '.format(np.mean(times), 1/np.mean(times)))
+            import ipdb; ipdb.set_trace()
+            times = []
+            for _ in range(1):
+                torch.cuda.synchronize()
+                time_start = time.time()
+                output_RGB = self.netG.denoise_model(generator_inputs,z)
+                torch.cuda.synchronize()
+                time_end = time.time()
+                times.append(time_end-time_start)
+            import ipdb; ipdb.set_trace()
+            print('Inference time for denoising: {:.6f}, FPS: {} '.format(np.mean(times), 1/np.mean(times)))
+                
 
-        mean_time = times.mean().item()
-        print("Inference time: {:.6f}, FPS: {} ".format(mean_time, 1000/mean_time))
+            
+
+
+
+
+
+
+        # self.netG.eval()
+        # random_input = torch.randn(1, 3, 256, 256).to(opt.device)
+        # starter, ender = torch.cuda.Event(enable_timing=True), torch.cuda.Event(enable_timing=True)
+        # iterations  = 300
+
+        # times = torch.zeros(iterations)
+        # with torch.no_grad():
+        #     for _ in range(50):
+        #         _ = self.netG(random_input,None,opt)
+        #     for iter in range(iterations):
+        #         starter.record()
+        #         _ = self.netG(random_input,None,opt)
+        #         ender.record()
+        #         torch.cuda.synchronize() 
+        #         curr_time = starter.elapsed_time(ender) # 计算时间
+        #         times[iter] = curr_time
+        # # print(curr_time)
+
+        # mean_time = times.mean().item()
+        # print("Inference time: {:.6f}, FPS: {} ".format(mean_time, 1000/mean_time))
 
 
     def test_sty(self,opt):

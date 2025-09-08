@@ -27,3 +27,6 @@ vis**
 **/*.egg-info
 **INFO**
 results
+dataset/
+vis*
+make_histo_numpy.py

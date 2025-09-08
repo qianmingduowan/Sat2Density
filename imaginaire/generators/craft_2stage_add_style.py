@@ -43,11 +43,13 @@ class Generator(nn.Module):
 
 
 
-    def forward(self, inputs, style_img=None,opt=None):
+    def forward(self, inputs, style_img=None,opt=None,origin_H_W=None):
         # predicted height of satellite images
+        out_put = {}
         estimated_height = self.depth_model(inputs)
-        geo_outputs = geometry_transform.render(opt,inputs,estimated_height,self.pano_direction,PE=self.PE)
+        geo_outputs = geometry_transform.render(opt,inputs,estimated_height,self.pano_direction,PE=self.PE,origin_H_W=origin_H_W)
         generator_inputs,opacity,depth = geo_outputs['rgb'],geo_outputs['opacity'],geo_outputs['depth']
+        out_put['generator_inputs'] = generator_inputs
         if 'voxel' in geo_outputs.keys():
             voxel = geo_outputs['voxel']
                 
@@ -62,12 +64,11 @@ class Generator(nn.Module):
             z = None
         # merge multiple sources(rgb,opacity,depth and sky) and denoise redundancy
         output_RGB = self.denoise_model(generator_inputs,z)
-        out_put = {'pred': output_RGB}
+        out_put['pred'] = output_RGB
         if self.style_inject:
             out_put['mu'] = mu
             out_put['logvar']  = logvar
         out_put['estimated_height'] = estimated_height
-        out_put['generator_inputs'] = generator_inputs
         out_put['voxel'] = voxel
         out_put['depth'] = depth
         out_put['opacity'] = opacity

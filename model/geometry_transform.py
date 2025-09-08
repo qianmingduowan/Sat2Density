@@ -36,7 +36,7 @@ def get_original_coord(opt):
     _y = np.repeat(np.array(range(W)).reshape(1,W), H, axis=0)
     _x = np.repeat(np.array(range(H)).reshape(1,H), W, axis=0).T
 
-    if opt.data.dataset in ['CVACT_Shi', 'CVACT', 'CVACThalf']:
+    if opt.data.dataset in ['CVACT_Shi', 'CVACT', 'CVACThalf', 'vigor']:
         _theta = (1 - 2 * (_x) / H) * np.pi/2 # latitude 
     elif opt.data.dataset in ['CVUSA']:
         _theta = (1 - 2 * (_x) / H) * np.pi/4
@@ -49,7 +49,7 @@ def get_original_coord(opt):
     return pano_direction  
 
 
-def render(opt,feature,voxel,pano_direction,PE=None):
+def render(opt,feature,voxel,pano_direction,PE=None,origin_H_W=None):
     '''
     render ground images from ssatellite images
     
@@ -69,6 +69,9 @@ def render(opt,feature,voxel,pano_direction,PE=None):
     elif opt.data.dataset == 'CVUSA':
         origin_height=2       
         realworld_scale = 55  
+    elif opt.data.dataset == 'vigor':
+        origin_height=2       
+        realworld_scale = 71
     else:
         assert Exception('Not implement yet')
 
@@ -79,14 +82,17 @@ def render(opt,feature,voxel,pano_direction,PE=None):
         sample_total_length = opt.data.sample_total_length
     else: sample_total_length = (int(max(np.sqrt((realworld_scale/2)**2+(realworld_scale/2)**2+(2)**2), \
         np.sqrt((realworld_scale/2)**2+(realworld_scale/2)**2+(opt.data.max_height-origin_height)**2))/pixel_resolution))/(sat_W/2)
-
-    origin_z = torch.ones([BS,1])*(-1+(origin_height/(realworld_scale/2))) ### -1 is the loweast position in regular cooridinate
+    origin_z = (torch.ones([BS,1])*(-1+(origin_height/(realworld_scale/2)))).cuda() ### -1 is the loweast position in regular cooridinate
     ##### origin_z: which can be definition by origin height
-    if opt.origin_H_W is None: ### origin_H_W is the photo taken space in regular coordinate
-        origin_H,origin_w = torch.zeros([BS,1]),torch.zeros([BS,1])   
+    if origin_H_W is None: ### origin_H_W is the photo taken space in regular coordinate
+        origin_H,origin_w = torch.zeros([BS,1]).cuda() ,torch.zeros([BS,1]).cuda() 
+        assert  opt.data.dataset in ['CVACT_Shi', 'CVACT', 'CVACThalf','CVUSA']
     else:
-        origin_H,origin_w = torch.ones([BS,1])*opt.origin_H_W[0],torch.ones([BS,1])*opt.origin_H_W[1]
-    origin = torch.cat([origin_w,origin_z,origin_H],dim=1).to(opt.device)[:,None,None,:]  ## w,z,h, samiliar to NERF coordinate definition
+        if len(origin_H_W)==BS:
+            # from BS,2 to 2,BS in torch way
+            origin_H_W = origin_H_W.transpose(0,1).cuda()
+        origin_H,origin_w = origin_H_W[0].unsqueeze(-1), origin_H_W[1].unsqueeze(-1)
+    origin = torch.cat([origin_w,origin_z,origin_H],dim=1).cuda()[:,None,None,:]  ## w,z,h, samiliar to NERF coordinate definition
     sample_len = ((torch.arange(opt.data.sample_number)+1)*(sample_total_length/opt.data.sample_number)).to(opt.device)
     ### sample_len:  For sample distance is fixed, so we can easily calculate sample len along a way by max length and sample number
     origin = origin[...,None]
@@ -176,8 +182,10 @@ def render_sat(opt,voxel):
         realworld_scale = 30  
     elif opt.data.dataset == 'CVUSA':
         origin_height=2       
-        realworld_scale = 55  
-
+        realworld_scale = 55
+    elif opt.data.dataset == 'vigor':
+        origin_height=2       
+        realworld_scale = 71  
     else:
         assert Exception('Not implement yet')
 

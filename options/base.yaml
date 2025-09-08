@@ -55,3 +55,4 @@ resume: false                                               # not test
 fp16:                                                       # not test
 vis_dir: 'vis'
 max_epochs: 30
+random_style:
