@@ -17,7 +17,7 @@ import torchvision.transforms as transforms
 from matplotlib.widgets import Cursor
 from PIL import Image
 from scipy.interpolate import interp1d, splev, splprep
-from torch.utils.data import default_convert,default_collate
+# from torch.utils.data import default_convert,default_collate
 import torchvision
 
 from model.geometry_transform import render_sat,render

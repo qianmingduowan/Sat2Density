@@ -1,0 +1,13 @@
+_parent_: options/sat2density_cvact.yaml
+
+
+data:
+    dataset: vigor                                       
+    root: ./dataset/vigor/ 
+    max_height: 20  
+
+# for test
+position_path:
+txt_file:
+
+batch_size: 16

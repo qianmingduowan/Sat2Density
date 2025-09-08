@@ -28,6 +28,7 @@ class Model(BaseModel):
         """     
         self.real_A = input['sat' ].to(self.device)
         self.real_B = input['pano'].to(self.device) if 'pano' in input else None # for testing
+        self.origin_H_W =torch.flip(input['position'],dims=[1]) if 'position' in input else None
         self.image_paths = input['paths']
         if self.opt.data.sky_mask:
             self.sky_mask = input['sky_mask'].to(self.device) if 'sky_mask' in input else None # for testing
@@ -38,12 +39,10 @@ class Model(BaseModel):
     def forward(self,opt):
         """Run forward pass; called by both functions <optimize_parameters> and <test>."""
         # origin_H_W is the inital localization of camera
-        if opt.task != 'test_vid':
-            opt.origin_H_W=None
         if hasattr(opt.arch.gen,'style_inject'):
             # replace the predicted sky with selected sky histogram
             if opt.arch.gen.style_inject == 'histo':
-                self.out_put =  self.netG(self.real_A,self.sky_histc.detach(),opt) 
+                self.out_put =  self.netG(self.real_A,self.sky_histc.detach(),opt,self.origin_H_W ) 
             else:
                 raise Exception('Unknown style inject mode')
         else:
@@ -113,7 +112,7 @@ class Model(BaseModel):
             self.train_loader = DataLoader(train_data,batch_size=opt.batch_size,shuffle=True,num_workers=opt.data.num_workers,drop_last=True)
             self.len_train_loader = len(self.train_loader)
 
-        val_data   = data.Dataset(opt,"val")
+        val_data   = data.Dataset(opt,"test") # change to val test for 
         opt.batch_size = 1 if opt.task in ["test" , "val","vis_test",'test_vid','test_sty'] else opt.batch_size
         opt.batch_size = 1 if opt.task=='test_speed' else opt.batch_size
         self.val_loader = DataLoader(val_data,batch_size=opt.batch_size,shuffle=False,num_workers=opt.data.num_workers)
