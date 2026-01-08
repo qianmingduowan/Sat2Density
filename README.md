@@ -7,7 +7,12 @@
 > [Project Page](https://sat2density.github.io/) | [Paper](https://arxiv.org/abs/2303.14672) | [Data](dataset/INSTALL.md) | [Install.md](scripts/INSTALL.md)
 >
 > ## 💡 Changelog
-- [2025/05/22]. The journal extension "Seeing through Satellite Images at Street Views" is available on [Arxiv](https://qianmingduowan.github.io/sat2density-pp/).
+- **[2026/01]**. 🏆 **Sat2Density++** is accepted by **T-PAMI**! Key updates include:
+  - **New Model**: A brand new architecture for superior 3D shape and video generation quality.
+  - **Scalability**: Expanded applicability from suburban to urban scenes.
+  - **Validation**: Extensive experiments and benchmarks to verify the effectiveness.
+  - *Stay tuned for the final paper and code!*
+- **[2025/05]**. The journal extension "Seeing through Satellite Images at Street Views" (**Sat2Density++**) is available on ArXiv [Project Page](https://qianmingduowan.github.io/sat2density-pp/).
 
 
 > <p align="center" float="left">
