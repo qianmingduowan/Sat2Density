@@ -120,8 +120,8 @@ CUDA_VISIBLE_DEVICES=X python train.py --yaml=sat2density_cvusa
 ## Citation
 If you use this code for your research, please cite
 
-```
-@InProceedings{Qian_2023_ICCV,
+```bibtex
+@InProceedings{Qian_2023_Sat2Density,
     author    = {Qian, Ming and Xiong, Jincheng and Xia, Gui-Song and Xue, Nan},
     title     = {Sat2Density: Faithful Density Learning from Satellite-Ground Image Pairs},
     booktitle = {Proceedings of the IEEE/CVF International Conference on Computer Vision (ICCV)},
@@ -130,14 +130,15 @@ If you use this code for your research, please cite
     pages     = {3683-3692}
 }
 
-@misc{Sat2Density++,
-      title={Seeing through Satellite Images at Street Views}, 
-      author={Ming Qian and Bin Tan and Qiuyu Wang and Xianwei Zheng and Hanjiang Xiong and Gui-Song Xia and Yujun Shen and Nan Xue},
-      year={2025},
-      eprint={2505.17001},
-      archivePrefix={arXiv},
-      primaryClass={cs.CV},
-      url={https://arxiv.org/abs/2505.17001}, 
+@ARTICLE{Qian_2026_Sat2Densitypp,
+  author={Qian, Ming and Tan, Bin and Wang, Qiuyu and Zheng, Xianwei and Xiong, Hanjiang and Xia, Gui-Song and Shen, Yujun and Xue, Nan},
+  journal={IEEE Transactions on Pattern Analysis and Machine Intelligence}, 
+  title={Seeing through Satellite Images at Street Views}, 
+  year={2026},
+  volume={},
+  number={},
+  pages={1-18},
+  doi={10.1109/TPAMI.2026.3652860}
 }
 ```
 
