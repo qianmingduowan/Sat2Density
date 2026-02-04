@@ -11,7 +11,7 @@
   - **New Model**: A brand new architecture for superior 3D shape and video generation quality.
   - **Scalability**: Expanded applicability from suburban to urban scenes.
   - **Validation**: Extensive experiments and benchmarks to verify the effectiveness.
-  - *The final paper and code have been released!*
+  - *The final [paper](https://arxiv.org/abs/2505.17001) and [code](https://github.com/qianmingduowan/Sat2Densitypp) have been released!*
 - **[2025/05]**. The journal extension "Seeing through Satellite Images at Street Views" (**Sat2Density++**) is available on ArXiv [Project Page](https://qianmingduowan.github.io/sat2density-pp/).
 
 
